@@ -2,6 +2,7 @@ package com.javamaster.entity;
 
 import com.javamaster.entity.enums.State;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 
 @Table(name = "tickets")
 @Entity
-@Builder
+@SuperBuilder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

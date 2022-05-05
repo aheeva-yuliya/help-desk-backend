@@ -2,6 +2,7 @@ package com.javamaster.entity;
 
 import com.javamaster.entity.enums.UserRole;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Data
 @ToString(exclude = "password")
 public class User {
