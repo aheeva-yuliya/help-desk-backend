@@ -33,11 +33,11 @@ public class CommentsController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> saveNew(@AuthenticationPrincipal final CustomUserDetails user,
+    public ResponseEntity<String> saveNew(@AuthenticationPrincipal final CustomUserDetails user,
                                      @Valid @RequestBody CommentRequestDto dto,
                                      @RequestParam Long ticketId) {
         Comment comment = fromDto.convert(dto, user, ticketId);
         commentService.addComment(comment);
-        return ResponseEntity.ok("comment added");
+        return ResponseEntity.ok("Comment has been successfully added.");
     }
 }

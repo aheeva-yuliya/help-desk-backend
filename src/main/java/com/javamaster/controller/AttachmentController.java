@@ -33,8 +33,8 @@ public class AttachmentController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<?> removeAttachment(@RequestParam Long attachmentId) {
+    public ResponseEntity<String> removeAttachment(@RequestParam Long attachmentId) {
         attachmentService.removeAttachment(attachmentId);
-        return ResponseEntity.ok("removed");
+        return ResponseEntity.ok("Attachment has been successfully removed.");
     }
 }

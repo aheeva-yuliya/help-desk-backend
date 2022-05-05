@@ -35,12 +35,12 @@ public class TicketController {
 
     @PostMapping()
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')")
-    public ResponseEntity<String> saveDraft(@AuthenticationPrincipal final CustomUserDetails user,
+    public ResponseEntity<String> saveTicket(@AuthenticationPrincipal final CustomUserDetails user,
                                             @Valid TicketRequestDto ticketRequestDto,
                                             @RequestParam String button) {
         TicketRaw raw = converterFromDto.convert(ticketRequestDto, user);
         ticketService.createTicket(raw, button);
-        return ResponseEntity.ok("ticket saved");
+        return ResponseEntity.ok("Ticket has been successfully created.");
     }
 
     @PatchMapping("/{id}")
@@ -48,19 +48,19 @@ public class TicketController {
                                           @PathVariable Long id,
                                           @RequestParam String action) {
         ticketService.changeStatus(userConverter.convert(user), id, action);
-        return ResponseEntity.ok("status changed");
+        return ResponseEntity.ok("Ticket status has been changed.");
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')")
-    public ResponseEntity<?> edit(@AuthenticationPrincipal final CustomUserDetails user,
+    public ResponseEntity<?> editTicket(@AuthenticationPrincipal final CustomUserDetails user,
                                   @PathVariable Long id,
                                   @Valid TicketRequestDto ticketRequestDto,
-                                  @RequestParam String button) {
+                                  @RequestParam String action) {
         TicketRaw raw = converterFromDto.convert(ticketRequestDto, user);
         raw.setId(id);
-        ticketService.editTicket(raw, button);
-        return ResponseEntity.ok("edited");
+        ticketService.editTicket(raw, action);
+        return ResponseEntity.ok("Ticket has been successfully edited.");
     }
 
     @GetMapping()

@@ -24,12 +24,12 @@ public class FeedbackController {
 
     @PostMapping()
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'MANAGER')")
-    public ResponseEntity<?> saveFeedback(@AuthenticationPrincipal final CustomUserDetails user,
+    public ResponseEntity<String> saveFeedback(@AuthenticationPrincipal final CustomUserDetails user,
                                           @Valid @RequestBody FeedbackDto feedbackDto,
                                           @RequestParam Long ticketId) {
         Feedback feedback = feedbackConverter.convert(feedbackDto);
         feedback.setOwner(userConverter.convert(user));
         feedbackService.saveFeedback(feedback, ticketId);
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok("Feedback has been successfully saved.");
     }
 }
