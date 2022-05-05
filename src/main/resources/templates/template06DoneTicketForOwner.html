@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Help-Desk Email</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <style>
+        body {
+            background-color: white;
+            color: #2b2929;
+            font-family: 'Arial', sans-serif;
+            font-weight: normal;
+            font-style: normal;
+            font-size: x-small;
+        }
+
+        a {
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+<!--/*@thymesVar id="ownerName" type="java.lang.String"*/-->
+<p th:text="${'Dear ' + ownerName + ','}"></p>
+<p>
+    Ticket
+    <!--/*@thymesVar id="ticketId" type="java.lang.Long"*/-->
+    <a href="localhost:8081/overview" th:style="'color: blue'" th:text="${'#' + ticketId}"></a>
+    was done by the Engineer.<br>
+    Please provide your feedback by clicking on the ticket ID.
+</p>
+</body>
