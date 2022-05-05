@@ -3,15 +3,16 @@ package com.javamaster.dto;
 import com.javamaster.entity.*;
 import com.javamaster.entity.enums.State;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-@Builder
-@Getter
-@Setter
+@SuperBuilder
+@Data
 public class TicketRaw {
     private Long id;
     private User owner;
