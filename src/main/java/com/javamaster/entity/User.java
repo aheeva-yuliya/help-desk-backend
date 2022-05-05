@@ -10,8 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
+@Data
 @ToString(exclude = "password")
 public class User {
     @Id

@@ -8,8 +8,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @ToString(exclude = "id")
 public class Category {
     @Id
