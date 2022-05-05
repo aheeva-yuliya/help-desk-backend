@@ -3,6 +3,7 @@ package com.javamaster.converter;
 import com.javamaster.dto.TicketResponseDto;
 import com.javamaster.entity.Ticket;
 
+import com.javamaster.entity.User;
 import com.javamaster.entity.enums.Action;
 import com.javamaster.entity.enums.UserRole;
 import com.javamaster.service.ActionService;
@@ -16,14 +17,14 @@ import java.util.stream.Collectors;
 public class TicketToTicketResponseDtoConverter {
     private final ActionService actionService;
 
-    public TicketResponseDto convert(Ticket source, UserRole userRole) {
+    public TicketResponseDto convert(Ticket source, User user) {
         return TicketResponseDto.builder()
                 .id(source.getId())
                 .name(source.getName())
                 .desiredResolutionDate(source.getDesiredResolutionDate())
                 .urgency(source.getUrgency().getUrgency())
                 .state(source.getState().getValue())
-                .action((actionService.setPossibleAction(source.getState(), userRole, source.getOwner().getRole()))
+                .action((actionService.setPossibleAction(source.getState(), user, source.getOwner()))
                         .stream()
                         .map(Action::getValue)
                         .collect(Collectors.toList()))

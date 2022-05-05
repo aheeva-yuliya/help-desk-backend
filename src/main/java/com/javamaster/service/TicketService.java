@@ -37,7 +37,7 @@ public class TicketService implements TicketServiceAdapter {
 
     @Override
     @Transactional
-    public void createTicket(TicketRaw rawTicket, String action) {
+    public Long createTicket(TicketRaw rawTicket, String action) {
         Timestamp now = dateTimeProvider.now();
         rawTicket.setCreatedOn(now);
 
@@ -47,12 +47,12 @@ public class TicketService implements TicketServiceAdapter {
 
         Ticket ticket = toTicketConverter.convert(rawTicket);
 
-        completeTicketAction(rawTicket, ticket.getOwner(), action, ticket);
+        return completeTicketAction(rawTicket, ticket.getOwner(), action, ticket);
     }
 
     @Override
     @Transactional
-    public void editTicket(TicketRaw ticketRaw, String action) {
+    public Long editTicket(TicketRaw ticketRaw, String action) {
         Ticket existed = getById(ticketRaw.getId());
 
         checkOwner(existed, ticketRaw.getOwner());
@@ -65,15 +65,15 @@ public class TicketService implements TicketServiceAdapter {
             checkFields(ticketRaw);
         }
 
-        completeTicketAction(ticketRaw, existed.getOwner(), action, existed);
+        return completeTicketAction(ticketRaw, existed.getOwner(), action, existed);
     }
 
     @Override
     @Transactional
-    public void changeStatus(User user, Long ticketId, String action) {
+    public Long changeStatus(User user, Long ticketId, String action) {
         Ticket ticket = getById(ticketId);
 
-        completeTicketAction(null, user, action, ticket);
+        return completeTicketAction(null, user, action, ticket);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class TicketService implements TicketServiceAdapter {
         }
     }
 
-    private void completeTicketAction(TicketRaw rawTicket, User user, String action, Ticket ticket) {
+    private Long completeTicketAction(TicketRaw rawTicket, User user, String action, Ticket ticket) {
         Map<String, Object> props = actionService.performAction(user, ticket, action);
 
         Ticket saved = saveTicket(ticket);
@@ -115,6 +115,7 @@ public class TicketService implements TicketServiceAdapter {
 
             checkComment(rawTicket.getComment(), ticket);
         }
+        return saved.getId();
     }
 
     private void checkOwner(Ticket ticket, User owner) {

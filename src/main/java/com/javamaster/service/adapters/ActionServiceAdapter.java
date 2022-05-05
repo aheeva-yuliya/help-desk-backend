@@ -14,5 +14,5 @@ public interface ActionServiceAdapter {
 
     void completeAction(Ticket ticket, Map<String, Object> props);
 
-    List<Action> setPossibleAction(State state, UserRole userRole, UserRole owner);
+    List<Action> setPossibleAction(State state, User user, User owner);
 }

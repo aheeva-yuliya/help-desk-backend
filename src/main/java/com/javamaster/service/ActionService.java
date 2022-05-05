@@ -54,7 +54,7 @@ public class ActionService implements ActionServiceAdapter {
                 break;
 
             case "Submit":
-                checkUserPermissionToPerformAction(state, user.getRole(), ticket.getOwner().getRole(), Action.SUBMIT);
+                checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.SUBMIT);
                 if (ticket.getState() == null) {
                     actionForHistoryRecord = "Ticket is created";
                     descriptionForHistoryRecord = "Ticket is created";
@@ -76,7 +76,7 @@ public class ActionService implements ActionServiceAdapter {
 
 
             case "Approve":
-                checkUserPermissionToPerformAction(state, user.getRole(), ticket.getOwner().getRole(), Action.APPROVE);
+                checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.APPROVE);
                 ticket.setApprover(user);
                 ticket.setState(State.APPROVED);
                 descriptionForHistoryRecord = "Ticket Status is changed from " + state + " to APPROVED.";
@@ -95,7 +95,7 @@ public class ActionService implements ActionServiceAdapter {
 
 
             case "Decline":
-                checkUserPermissionToPerformAction(state, user.getRole(), ticket.getOwner().getRole(), Action.DECLINE);
+                checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.DECLINE);
                 ticket.setApprover(user);
                 ticket.setState(State.DECLINED);
                 descriptionForHistoryRecord = "Ticket Status is changed from " + state + " to DECLINED.";
@@ -113,7 +113,7 @@ public class ActionService implements ActionServiceAdapter {
                 break;
 
             case "Cancel":
-                checkUserPermissionToPerformAction(state, user.getRole(), ticket.getOwner().getRole(), Action.CANCEL);
+                checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.CANCEL);
                 if (!user.getId().equals(ticket.getOwner().getId()) && state.equals(State.NEW)) {
                     ticket.setApprover(user);
 
@@ -140,14 +140,14 @@ public class ActionService implements ActionServiceAdapter {
                 break;
 
             case "Assign to Me":
-                checkUserPermissionToPerformAction(state, user.getRole(), ticket.getOwner().getRole(), Action.ASSIGN);
+                checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.ASSIGN);
                 ticket.setAssignee(user);
                 ticket.setState(State.PROGRESS);
                 descriptionForHistoryRecord = "Ticket Status is changed from " + state + " to IN PROGRESS.";
                 break;
 
             case "Done":
-                checkUserPermissionToPerformAction(state, user.getRole(), ticket.getOwner().getRole(), Action.DONE);
+                checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.DONE);
                 ticket.setState(State.DONE);
                 descriptionForHistoryRecord = "Ticket Status is changed from " + state + " to DONE.";
 
@@ -201,28 +201,28 @@ public class ActionService implements ActionServiceAdapter {
     }
 
     @Override
-    public List<Action> setPossibleAction(State state, UserRole userRole, UserRole owner) {
+    public List<Action> setPossibleAction(State state, User currentUser, User owner) {
         if (state == null) {
             return List.of(Action.SUBMIT);
         }
 
         boolean ownerState = state.equals(State.DRAFT) || state.equals(State.DECLINED);
-        if (userRole.equals(UserRole.EMPLOYEE)) {
+        if (currentUser.getRole().equals(UserRole.EMPLOYEE)) {
             if (ownerState) {
                 return List.of(Action.SUBMIT, Action.CANCEL);
             }
         }
 
-        if (userRole.equals(UserRole.MANAGER)) {
-            if (userRole.equals(owner) && ownerState) {
+        if (currentUser.getRole().equals(UserRole.MANAGER)) {
+            if (currentUser.getRole().equals(owner.getRole()) && ownerState) {
                 return List.of(Action.SUBMIT, Action.CANCEL);
             }
-            if (state.equals(State.NEW)) {
+            if (state.equals(State.NEW) && !currentUser.equals(owner)) {
                 return List.of(Action.APPROVE, Action.DECLINE, Action.CANCEL);
             }
         }
 
-        if (userRole.equals(UserRole.ENGINEER)) {
+        if (currentUser.getRole().equals(UserRole.ENGINEER)) {
             if (state.equals(State.APPROVED)) {
                 return List.of(Action.ASSIGN, Action.CANCEL);
             }
@@ -234,8 +234,8 @@ public class ActionService implements ActionServiceAdapter {
         return List.of();
     }
 
-    private void checkUserPermissionToPerformAction(State state, UserRole userRole, UserRole owner, Action action) {
-        List<Action> possibleActions = setPossibleAction(state, userRole, owner);
+    private void checkUserPermissionToPerformAction(State state, User user, User owner, Action action) {
+        List<Action> possibleActions = setPossibleAction(state, user, owner);
         if (!possibleActions.contains(action)) {
             throw new ForbiddenException("Forbidden to proceed.");
         }

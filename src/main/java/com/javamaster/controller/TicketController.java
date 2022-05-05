@@ -37,30 +37,30 @@ public class TicketController {
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')")
     public ResponseEntity<String> saveTicket(@AuthenticationPrincipal final CustomUserDetails user,
                                             @Valid TicketRequestDto ticketRequestDto,
-                                            @RequestParam String button) {
+                                            @RequestParam String action) {
         TicketRaw raw = converterFromDto.convert(ticketRequestDto, user);
-        ticketService.createTicket(raw, button);
-        return ResponseEntity.ok("Ticket has been successfully created.");
+        Long id = ticketService.createTicket(raw, action);
+        return ResponseEntity.ok("Ticket # " + id + " has been successfully created.");
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> changeStatus(@AuthenticationPrincipal final CustomUserDetails user,
+    public ResponseEntity<String> changeStatus(@AuthenticationPrincipal final CustomUserDetails user,
                                           @PathVariable Long id,
                                           @RequestParam String action) {
         ticketService.changeStatus(userConverter.convert(user), id, action);
-        return ResponseEntity.ok("Ticket status has been changed.");
+        return ResponseEntity.ok("Ticket # " + id + " status has been changed.");
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')")
-    public ResponseEntity<?> editTicket(@AuthenticationPrincipal final CustomUserDetails user,
+    public ResponseEntity<String> editTicket(@AuthenticationPrincipal final CustomUserDetails user,
                                   @PathVariable Long id,
                                   @Valid TicketRequestDto ticketRequestDto,
                                   @RequestParam String action) {
         TicketRaw raw = converterFromDto.convert(ticketRequestDto, user);
         raw.setId(id);
         ticketService.editTicket(raw, action);
-        return ResponseEntity.ok("Ticket has been successfully edited.");
+        return ResponseEntity.ok("Ticket # " + id + " has been successfully edited.");
     }
 
     @GetMapping()
@@ -68,7 +68,7 @@ public class TicketController {
         var role = user.getUserRole();
         return ticketService.getByUserId(user.getId(), role)
                 .stream()
-                .map(ticket -> converterToDto.convert(ticket, role))
+                .map(ticket -> converterToDto.convert(ticket,  userConverter.convert(user)))
                 .collect(Collectors.toList());
     }
 

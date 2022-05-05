@@ -8,11 +8,11 @@ import com.javamaster.entity.enums.UserRole;
 import java.util.List;
 
 public interface TicketServiceAdapter {
-    void createTicket(TicketRaw rawTicket, String action);
+    Long createTicket(TicketRaw rawTicket, String action);
 
-    void editTicket(TicketRaw ticketRaw, String action);
+    Long editTicket(TicketRaw ticketRaw, String action);
 
-    void changeStatus(User user, Long ticketId, String action);
+    Long changeStatus(User user, Long ticketId, String action);
 
     Ticket saveTicket(Ticket ticket);
 
