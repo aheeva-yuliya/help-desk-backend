@@ -16,13 +16,7 @@ public class UserRepositoryTests extends DatabaseIntegrationTests {
 
     @Test
     public void shouldFindByEmailWhenUserExists() {
-        User expected = User.builder()
-                .id(null)
-                .name("user8")
-                .email("employee8_mogilev@yopmail.com")
-                .password("employee8")
-                .role(UserRole.EMPLOYEE)
-                .build();
+        User expected = UserMother.create().id(null).build();
         saveAndFlush(expected);
         expected.setId(1000);
         User actual = userRepository.findByEmail("employee8_mogilev@yopmail.com");

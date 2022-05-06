@@ -6,10 +6,10 @@ import com.javamaster.entity.enums.UserRole;
 public class UserMother {
     public static User.UserBuilder<?, ?> create() {
         return User.builder()
-                .id(1)
-                .name("user1")
-                .email("employee1_mogilev@yopmail.com")
-                .password("employee1")
+                .id(8)
+                .name("user8")
+                .email("employee8_mogilev@yopmail.com")
+                .password("employee8")
                 .role(UserRole.EMPLOYEE);
     }
 

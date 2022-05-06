@@ -1,4 +1,4 @@
-package com.javamaster.controller.test;
+package com.javamaster.controller.testFrontPart;
 
 import com.javamaster.entity.User;
 import com.javamaster.repository.UserRepository;
