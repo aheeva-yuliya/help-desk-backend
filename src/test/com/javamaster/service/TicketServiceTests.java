@@ -2,7 +2,6 @@ package com.javamaster.service;
 
 import com.javamaster.converter.TicketRawToTicketConverter;
 import com.javamaster.dto.TicketRaw;
-import com.javamaster.entity.Category;
 import com.javamaster.entity.Ticket;
 import com.javamaster.mother.TicketMother;
 import com.javamaster.mother.TicketRawMother;
@@ -12,16 +11,18 @@ import com.javamaster.repository.TicketRepository;
 import com.javamaster.service.adapters.ActionServiceAdapter;
 import com.javamaster.service.adapters.AttachmentServiceAdapter;
 import com.javamaster.service.adapters.CommentServiceAdapter;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import javax.ws.rs.ForbiddenException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 public class TicketServiceTests {
     private TicketService ticketService;
@@ -42,47 +43,46 @@ public class TicketServiceTests {
         actionService = Mockito.mock(ActionServiceAdapter.class);
 
         ticketService = new TicketService(ticketRepository, dateTimeProvider, toTicketConverter, attachmentService,
-                commentService, actionService );
+                commentService, actionService);
     }
 
-    @Nested
-    public class CreateTests {
 
-        @Test
-        public void shouldSaveTicketWhenSaveAsDraft() {
-            Ticket ticket = TicketMother.create().build();
-            TicketRaw ticketRaw = TicketRawMother.create().build();
-            Mockito.when(dateTimeProvider.now())
-                    .thenReturn(Timestamp.valueOf(
-                            LocalDateTime.of(2022, 10, 10, 10, 30)
-                    ));
-            Mockito.when(toTicketConverter.convert(ticketRaw))
-                    .thenReturn(ticket);
-            Mockito.when(actionService.performAction(UserMother.create().build(),
-                    ticket,
-                    "Save as Draft"))
-                    .thenReturn(Map.of());
-            //Mockito.verify(ticketRepository).save(ticket);
-        }
+    @Test
+    public void shouldSaveTicketWhenSaveAsDraft() {
+        Ticket ticket = TicketMother.create()
+                .createdOn(Timestamp.valueOf(LocalDateTime.of(2022, 10, 10, 10, 30)))
+                .build();
+        TicketRaw ticketRaw = TicketRawMother.create().build();
+        Ticket saved = TicketMother.create().id(1L).build();
+        Map<String, Object> pros = new HashMap<>();
+        Mockito.when(dateTimeProvider.now())
+                .thenReturn(Timestamp.valueOf(
+                        LocalDateTime.of(2022, 10, 10, 10, 30)
+                ));
+        Mockito.when(toTicketConverter.convert(ticketRaw))
+                .thenReturn(ticket);
+        Mockito.when(actionService.performAction(UserMother.create().build(),
+                        ticket,
+                        "Save as Draft"))
+                .thenReturn(pros);
+        Mockito.when(ticketRepository.save(ticket)).thenReturn(saved);
+        ticketService.createTicket(ticketRaw, "Save as Draft");
+        Mockito.verify(ticketRepository).save(ticket);
+        Mockito.verify(actionService).completeAction(saved, pros);
+        Mockito.verify(attachmentService, Mockito.never()).addAttachment(Mockito.any());
+        Mockito.verify(commentService, Mockito.never()).addComment(Mockito.any());
     }
 
     @Test
-    void editTicket() {
-    }
-
-    @Test
-    void changeStatus() {
-    }
-
-    @Test
-    void saveTicket() {
-    }
-
-    @Test
-    void getById() {
-    }
-
-    @Test
-    void getByUserId() {
+    public void shouldThrowExceptionWhenNotOwnerEditTicket() {
+        TicketRaw ticketRaw = TicketRawMother.create().id(1L).owner(UserMother.create().id(2).build()).build();
+        Ticket ticket = TicketMother.create().build();
+        Mockito.when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticket));
+        Exception exception = Assertions.assertThrows(ForbiddenException.class, () ->
+                ticketService.editTicket(ticketRaw, "Save as Draft")
+        );
+        Mockito.verify(ticketRepository, Mockito.never()).save(Mockito.any());
+        String expectedMessage = "Ticket could only be edited by the owner";
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
     }
 }
