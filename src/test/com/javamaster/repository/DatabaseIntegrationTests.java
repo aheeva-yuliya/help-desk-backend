@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @DataJpaTest
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@Sql("scripts/RESET_AUTO_INCREMENT.sql")
+@Sql("/scripts/RESET_AUTO_INCREMENT.sql")
 public abstract class DatabaseIntegrationTests {
 
     private static final PostgreSQLContainer database;

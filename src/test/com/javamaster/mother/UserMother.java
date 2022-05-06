@@ -12,4 +12,22 @@ public class UserMother {
                 .password("employee1")
                 .role(UserRole.EMPLOYEE);
     }
+
+    public static User.UserBuilder<?, ?> createIvan() {
+        return User.builder()
+                .id(null)
+                .email("ivan@yopmail.com")
+                .name("Ivan")
+                .password("ivan")
+                .role(UserRole.MANAGER);
+    }
+
+    public static User.UserBuilder<?, ?> createPetr() {
+        return User.builder()
+                .id(null)
+                .email("petr@yopmail.com")
+                .name("Petr")
+                .password("petr")
+                .role(UserRole.ENGINEER);
+    }
 }
