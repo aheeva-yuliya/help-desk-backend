@@ -18,9 +18,9 @@ import javax.activation.MimetypesFileTypeMap;
 public class AttachmentController {
     private final AttachmentServiceAdapter attachmentService;
 
-    @GetMapping()
-    public ResponseEntity<Resource> downloadFile(@RequestParam Long attachmentId) {
-        final Attachment attachment = attachmentService.getById(attachmentId);
+    @GetMapping("/{id}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
+        final Attachment attachment = attachmentService.getById(id);
 
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
         String mimeType = fileTypeMap.getContentType(attachment.getName());
@@ -32,9 +32,9 @@ public class AttachmentController {
                 .body(new ByteArrayResource(attachment.getBlob()));
     }
 
-    @DeleteMapping()
-    public ResponseEntity<String> removeAttachment(@RequestParam Long attachmentId) {
-        attachmentService.removeAttachment(attachmentId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> removeAttachment(@PathVariable Long id) {
+        attachmentService.removeAttachment(id);
         return ResponseEntity.ok("Attachment has been successfully removed.");
     }
 }

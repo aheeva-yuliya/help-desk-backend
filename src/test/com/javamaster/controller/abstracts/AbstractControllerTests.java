@@ -1,4 +1,4 @@
-package com.javamaster.controller;
+package com.javamaster.controller.abstracts;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.nio.charset.StandardCharsets;
 
@@ -41,45 +40,6 @@ public abstract class AbstractControllerTests {
     }
 
     @SneakyThrows
-    protected <T> T sendData(final HttpMethod method,
-                             final String url,
-                             final Object object,
-                             final Class<T> clazz) {
-        final var actualString = sendData(method, url, object)
-                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-        return objectMapper.readValue(actualString, clazz);
-    }
-
-    @SneakyThrows
-    protected void testUnauthorized(final HttpMethod method,
-                                    final String url) {
-        mvc.perform(MockMvcRequestBuilders.request(method, url)
-                        .with(csrf()))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @SneakyThrows
-    protected ResultActions testForbidden(final HttpMethod method,
-                                          final String url,
-                                          final Object object) {
-        final var request = MockMvcRequestBuilders.request(method, url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(object))
-                .with(csrf());
-        return mvc.perform(request).andExpect(status().isForbidden());
-    }
-
-    @SneakyThrows
-    protected <T> T getData(final String url,
-                            final Class<T> clazz) {
-        final String actualString = mvc.perform(MockMvcRequestBuilders.get(url)
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
-        return objectMapper.readValue(actualString, clazz);
-    }
-
-    @SneakyThrows
     protected <T> T getData(final String url,
                             final TypeReference<T> type) {
         final String actualString = mvc.perform(MockMvcRequestBuilders.get(url)
@@ -95,5 +55,17 @@ public abstract class AbstractControllerTests {
         return mvc.perform(MockMvcRequestBuilders.request(method, url)
                         .with(csrf()))
                 .andExpect(status().isOk());
+    }
+
+
+    @SneakyThrows
+    protected ResultActions testForbidden(final HttpMethod method,
+                                          final String url,
+                                          final Object object) {
+        final var request = MockMvcRequestBuilders.request(method, url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(object))
+                .with(csrf());
+        return mvc.perform(request).andExpect(status().isForbidden());
     }
 }

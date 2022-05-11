@@ -22,11 +22,11 @@ public class FeedbackController {
     private final FeedbackDtoToFeedbackConverter feedbackConverter;
     private final FeedbackServiceAdapter feedbackService;
 
-    @PostMapping()
+    @PostMapping("/{ticketId}")
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'MANAGER')")
     public ResponseEntity<String> saveFeedback(@AuthenticationPrincipal final CustomUserDetails user,
-                                          @Valid @RequestBody FeedbackDto feedbackDto,
-                                          @RequestParam Long ticketId) {
+                                               @Valid @RequestBody FeedbackDto feedbackDto,
+                                               @PathVariable Long ticketId) {
         Feedback feedback = feedbackConverter.convert(feedbackDto);
         feedback.setOwner(userConverter.convert(user));
         feedbackService.saveFeedback(feedback, ticketId);

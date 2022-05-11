@@ -1,14 +1,14 @@
 package com.javamaster.dto;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
-@Builder
-@Getter
-@Setter
+@SuperBuilder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TicketOverview {

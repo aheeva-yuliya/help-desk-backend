@@ -32,12 +32,11 @@ public class TicketController {
     private final CustomUserDetailsToUserConverter userConverter;
     private final TicketOverviewServiceAdapter ticketOverviewService;
 
-
     @PostMapping()
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')")
     public ResponseEntity<String> saveTicket(@AuthenticationPrincipal final CustomUserDetails user,
-                                            @Valid TicketRequestDto ticketRequestDto,
-                                            @RequestParam String action) {
+                                             @Valid TicketRequestDto ticketRequestDto,
+                                             @RequestParam String action) {
         TicketRaw raw = converterFromDto.convert(ticketRequestDto, user);
         Long id = ticketService.createTicket(raw, action);
         return ResponseEntity.ok("Ticket # " + id + " has been successfully created.");
@@ -45,8 +44,8 @@ public class TicketController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> changeStatus(@AuthenticationPrincipal final CustomUserDetails user,
-                                          @PathVariable Long id,
-                                          @RequestParam String action) {
+                                               @PathVariable Long id,
+                                               @RequestParam String action) {
         ticketService.changeStatus(userConverter.convert(user), id, action);
         return ResponseEntity.ok("Ticket # " + id + " status has been changed.");
     }
@@ -54,9 +53,9 @@ public class TicketController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')")
     public ResponseEntity<String> editTicket(@AuthenticationPrincipal final CustomUserDetails user,
-                                  @PathVariable Long id,
-                                  @Valid TicketRequestDto ticketRequestDto,
-                                  @RequestParam String action) {
+                                             @PathVariable Long id,
+                                             @Valid TicketRequestDto ticketRequestDto,
+                                             @RequestParam String action) {
         TicketRaw raw = converterFromDto.convert(ticketRequestDto, user);
         raw.setId(id);
         ticketService.editTicket(raw, action);
@@ -68,7 +67,7 @@ public class TicketController {
         var role = user.getUserRole();
         return ticketService.getByUserId(user.getId(), role)
                 .stream()
-                .map(ticket -> converterToDto.convert(ticket,  userConverter.convert(user)))
+                .map(ticket -> converterToDto.convert(ticket, userConverter.convert(user)))
                 .collect(Collectors.toList());
     }
 

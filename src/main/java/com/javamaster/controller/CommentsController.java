@@ -24,20 +24,19 @@ public class CommentsController {
     private final CommentToCommentResponseDtoConverter toDto;
     private final CommentRequestDtoToCommentConverter fromDto;
 
-    @GetMapping()
-    public List<CommentResponseDto> getAllByTicketId(@RequestParam Long ticketId) {
+    @GetMapping("/{ticketId}")
+    public List<CommentResponseDto> getAllByTicketId(@PathVariable Long ticketId) {
         return commentService.getCommentsByTicketId(ticketId)
                 .stream()
                 .map(toDto::convert)
                 .collect(Collectors.toList());
     }
 
-    @PostMapping()
+    @PostMapping("/{ticketId}")
     public ResponseEntity<String> saveNew(@AuthenticationPrincipal final CustomUserDetails user,
-                                     @Valid @RequestBody CommentRequestDto dto,
-                                     @RequestParam Long ticketId) {
-        Comment comment = fromDto.convert(dto, user, ticketId);
-        commentService.addComment(comment);
+                                          @Valid @RequestBody CommentRequestDto dto,
+                                          @PathVariable Long ticketId) {
+        commentService.addComment(fromDto.convert(dto, user, ticketId));
         return ResponseEntity.ok("Comment has been successfully added.");
     }
 }

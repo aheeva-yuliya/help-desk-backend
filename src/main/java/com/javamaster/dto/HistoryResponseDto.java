@@ -1,14 +1,13 @@
 package com.javamaster.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Builder
 @Getter
 @Setter
+@Data
 public class HistoryResponseDto {
     private Timestamp date;
     private String user;
