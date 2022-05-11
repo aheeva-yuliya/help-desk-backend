@@ -9,10 +9,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 
 @Import(TestUserDetailsService.class)
 public class AbstractJunitControllerTests extends AbstractControllerTests {
-//    @MockBean
-//    protected AuthenticationProvider authenticationProvider;
     @MockBean
     protected JwtProvider jwtProvider;
-    @MockBean
-    protected JwtFilter jwtFilter;
 }

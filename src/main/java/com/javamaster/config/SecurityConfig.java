@@ -41,10 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth").permitAll()
                 .antMatchers("/tests").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
+                .anyRequest().authenticated()
 
                 .and()
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-
+                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                
                 .logout()
                 .logoutSuccessUrl("/auth")
                 .logoutUrl("/logout")
