@@ -19,4 +19,6 @@ public interface TicketServiceAdapter {
     Ticket getById(Long id);
 
     List<Ticket> getByUserId(Integer userId, UserRole role);
+
+    List<Ticket> getByUserId(Integer userId);
 }

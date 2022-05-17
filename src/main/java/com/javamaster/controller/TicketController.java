@@ -71,6 +71,14 @@ public class TicketController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/my")
+    public List<TicketResponseDto> getMyTickets(@AuthenticationPrincipal final CustomUserDetails user) {
+        return ticketService.getByUserId(user.getId())
+                .stream()
+                .map(ticket -> converterToDto.convert(ticket, userConverter.convert(user)))
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/{id}")
     public TicketOverview getOverviewByTicketId(@PathVariable Long id) {
         return ticketOverviewService.getTicketOverview(id);

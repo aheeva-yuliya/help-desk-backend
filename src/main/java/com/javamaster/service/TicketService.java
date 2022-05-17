@@ -98,9 +98,14 @@ public class TicketService implements TicketServiceAdapter {
                     State.APPROVED, State.PROGRESS, State.DONE);
             return checkEngineerList(tickets, userId);
         } else {
-            return ticketRepository
-                    .findAllByEmployeeIdOrderByUrgencyIdDesiredResolutionDate(userId);
+            return getByUserId(userId);
         }
+    }
+
+    @Override
+    public List<Ticket> getByUserId(Integer userId) {
+        return ticketRepository
+                .findAllByEmployeeIdOrderByUrgencyIdDesiredResolutionDate(userId);
     }
 
     private Long completeTicketAction(TicketRaw rawTicket, User user, String action, Ticket ticket) {
