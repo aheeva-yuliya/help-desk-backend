@@ -1,7 +1,7 @@
 package com.javamaster.auth;
 
 import com.javamaster.config.jwt.CustomUserDetails;
-import com.javamaster.entity.enums.UserRole;
+import com.javamaster.entities.enums.UserRole;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

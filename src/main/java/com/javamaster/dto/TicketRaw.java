@@ -1,11 +1,8 @@
 package com.javamaster.dto;
 
-import com.javamaster.entity.*;
-import com.javamaster.entity.enums.State;
-import lombok.Builder;
+import com.javamaster.entities.*;
+import com.javamaster.entities.enums.State;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.sql.Timestamp;

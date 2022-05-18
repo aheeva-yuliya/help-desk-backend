@@ -1,7 +1,7 @@
 package com.javamaster.config.jwt;
 
-import com.javamaster.entity.User;
-import com.javamaster.entity.enums.UserRole;
+import com.javamaster.entities.User;
+import com.javamaster.entities.enums.UserRole;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;

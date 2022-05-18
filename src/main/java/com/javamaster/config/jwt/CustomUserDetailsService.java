@@ -1,8 +1,8 @@
 package com.javamaster.config.jwt;
 
-import com.javamaster.entity.User;
-import com.javamaster.service.UserService;
-import com.javamaster.service.adapters.UserServiceAdapter;
+import com.javamaster.entities.User;
+import com.javamaster.services.UserService;
+import com.javamaster.services.adapters.UserServiceAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
