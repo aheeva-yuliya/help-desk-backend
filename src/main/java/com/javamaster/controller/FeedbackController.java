@@ -23,7 +23,7 @@ public class FeedbackController {
     private final FeedbackServiceAdapter feedbackService;
 
     @PostMapping("/{ticketId}")
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')")
     public ResponseEntity<String> saveFeedback(@AuthenticationPrincipal final CustomUserDetails user,
                                                @Valid @RequestBody FeedbackDto feedbackDto,
                                                @PathVariable Long ticketId) {

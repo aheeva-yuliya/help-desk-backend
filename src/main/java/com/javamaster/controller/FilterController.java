@@ -13,14 +13,11 @@ import java.util.List;
 @RequestMapping("/filter")
 public class FilterController {
     private final FilterTicketsServiceAdapter filterTicketsService;
-    private List<TicketResponseDto> saved;
 
     @GetMapping()
     public List<TicketResponseDto> filter(@RequestBody List<TicketResponseDto> tickets,
                                           @RequestParam String by,
                                           @RequestParam String criteria) {
-        saved = tickets;
-
         switch (by) {
             case ("id"):
                 return filterTicketsService.filterById(tickets, criteria);
@@ -35,11 +32,5 @@ public class FilterController {
             default:
                 return tickets;
         }
-    }
-
-    @PreAuthorize("hasAnyRole('EMPLOYEE')")
-    @GetMapping("/return")
-    public List<TicketResponseDto> returnSaved() {
-        return saved;
     }
 }

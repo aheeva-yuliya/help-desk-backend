@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 @ToString(exclude = "id")
 public class Urgency {
     @Id

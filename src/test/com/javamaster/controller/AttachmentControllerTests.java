@@ -19,6 +19,7 @@ public class AttachmentControllerTests extends AbstractJunitControllerTests {
     @WithUserDetails("employee1_mogilev@yopmail.com")
     public void shouldReturn200AndRemoveAttachmentWhenRequestedByAuthorized() {
         deleteData(HttpMethod.DELETE, "/attachments/15");
+
         verify(attachmentService).removeAttachment(15L);
     }
 }

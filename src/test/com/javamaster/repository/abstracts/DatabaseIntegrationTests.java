@@ -1,4 +1,4 @@
-package com.javamaster.repository;
+package com.javamaster.repository.abstracts;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

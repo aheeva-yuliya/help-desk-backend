@@ -27,7 +27,7 @@ public class UserServiceTests {
     @Test
     public void shouldFindUserByEmailAndPasswordWhenUserExists() {
         Mockito.when(userRepository.findByEmail("employee1_mogilev@yopmail.com"))
-                .thenReturn(UserMother.create().build());
+                .thenReturn(UserMother.createAuthorized().build());
         Mockito.when(passwordEncoder.matches("employee1", "employee1")).thenReturn(true);
         Assertions.assertNotNull(userService.findByEmailAndPassword("employee1_mogilev@yopmail.com", "employee1"));
     }

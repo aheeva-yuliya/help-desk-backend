@@ -39,8 +39,8 @@ public class TicketControllerTests extends AbstractJunitControllerTests {
         TicketOverview expected = TicketOverviewMother.create().build();
         when(ticketOverviewService.getTicketOverview(1L))
                 .thenReturn(expected);
-        TicketOverview actual = getData("/tickets/1", new TypeReference<>() {
-        });
+        TicketOverview actual = getData("/tickets/1", new TypeReference<>() {});
+
         Assertions.assertEquals(expected, actual);
     }
 

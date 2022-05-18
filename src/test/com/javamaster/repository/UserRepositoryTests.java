@@ -3,6 +3,7 @@ package com.javamaster.repository;
 import com.javamaster.entity.User;
 import com.javamaster.entity.enums.UserRole;
 import com.javamaster.mother.UserMother;
+import com.javamaster.repository.abstracts.DatabaseIntegrationTests;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,8 +18,9 @@ public class UserRepositoryTests extends DatabaseIntegrationTests {
     @Test
     public void shouldFindByEmailWhenUserExists() {
         User expected = UserMother.create().id(null).build();
+
         saveAndFlush(expected);
-        expected.setId(1000);
+
         User actual = userRepository.findByEmail("employee8_mogilev@yopmail.com");
         assertEquals(expected, actual);
     }

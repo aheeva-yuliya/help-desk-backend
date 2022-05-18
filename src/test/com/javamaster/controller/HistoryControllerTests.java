@@ -29,8 +29,12 @@ public class HistoryControllerTests extends AbstractJunitControllerTests {
         when(historyService.getHistoryByTicketId(2L))
                 .thenReturn(List.of(History.builder().build(), History.builder().build()));
         when(converter.convert(History.builder().build())).thenReturn(HistoryResponseDto.builder().build());
-        List<HistoryResponseDto> expected = List.of(HistoryResponseDto.builder().build(), HistoryResponseDto.builder().build());
+        List<HistoryResponseDto> expected = List.of(
+                HistoryResponseDto.builder().build(),
+                HistoryResponseDto.builder().build()
+        );
         List<HistoryResponseDto> actual = getData("/history/2", new TypeReference<>() {});
+
         Assertions.assertEquals(expected, actual);
     }
 }

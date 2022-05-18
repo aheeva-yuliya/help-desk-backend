@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Table(name = "tickets")
 @Entity

@@ -15,7 +15,7 @@ public class UserMother {
 
     public static User.UserBuilder<?, ?> createAuthorized() {
         return User.builder()
-                .id(1)
+                .id(2)
                 .name("user1")
                 .email("employee1_mogilev@yopmail.com")
                 .password("employee1")
