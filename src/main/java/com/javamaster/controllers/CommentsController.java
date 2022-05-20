@@ -5,6 +5,7 @@ import com.javamaster.converters.CommentRequestDtoToCommentConverter;
 import com.javamaster.converters.CommentToCommentResponseDtoConverter;
 import com.javamaster.dto.CommentRequestDto;
 import com.javamaster.dto.CommentResponseDto;
+import com.javamaster.dto.ResponseMessage;
 import com.javamaster.services.adapters.CommentServiceAdapter;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +33,10 @@ public class CommentsController {
     }
 
     @PostMapping("/{ticketId}")
-    public ResponseEntity<String> saveNew(@AuthenticationPrincipal final CustomUserDetails user,
-                                          @Valid @RequestBody CommentRequestDto dto,
-                                          @PathVariable Long ticketId) {
+    public ResponseMessage saveNew(@AuthenticationPrincipal final CustomUserDetails user,
+                                   @Valid @RequestBody CommentRequestDto dto,
+                                   @PathVariable Long ticketId) {
         commentService.addComment(fromDto.convert(dto, user, ticketId));
-        return ResponseEntity.ok("Comment has been successfully added.");
+        return new ResponseMessage("Comment has been successfully added.");
     }
 }

@@ -4,6 +4,7 @@ import com.javamaster.config.jwt.CustomUserDetails;
 import com.javamaster.converters.CustomUserDetailsToUserConverter;
 import com.javamaster.converters.FeedbackDtoToFeedbackConverter;
 import com.javamaster.dto.FeedbackDto;
+import com.javamaster.dto.ResponseMessage;
 import com.javamaster.entities.Feedback;
 import com.javamaster.services.adapters.FeedbackServiceAdapter;
 import lombok.AllArgsConstructor;
@@ -24,12 +25,12 @@ public class FeedbackController {
 
     @PostMapping("/{ticketId}")
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')")
-    public ResponseEntity<String> saveFeedback(@AuthenticationPrincipal final CustomUserDetails user,
-                                               @Valid @RequestBody FeedbackDto feedbackDto,
-                                               @PathVariable Long ticketId) {
+    public ResponseMessage saveFeedback(@AuthenticationPrincipal final CustomUserDetails user,
+                                        @Valid @RequestBody FeedbackDto feedbackDto,
+                                        @PathVariable Long ticketId) {
         Feedback feedback = feedbackConverter.convert(feedbackDto);
         feedback.setOwner(userConverter.convert(user));
         feedbackService.saveFeedback(feedback, ticketId);
-        return ResponseEntity.ok("Feedback has been successfully saved.");
+        return new ResponseMessage("Feedback has been successfully saved.");
     }
 }

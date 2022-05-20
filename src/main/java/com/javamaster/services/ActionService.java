@@ -42,7 +42,7 @@ public class ActionService implements ActionServiceAdapter {
         Map<String, Object> afterPerformAction = new HashMap<>();
 
         switch (action) {
-            case "Save as Draft":
+            case "SAVE AS DRAFT":
                 if (ticket.getState() == null) {
                     actionForHistoryRecord = "Ticket is created";
                     descriptionForHistoryRecord = "Ticket is created";
@@ -53,7 +53,7 @@ public class ActionService implements ActionServiceAdapter {
                 }
                 break;
 
-            case "Submit":
+            case "SUBMIT":
                 checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.SUBMIT);
                 if (ticket.getState() == null) {
                     actionForHistoryRecord = "Ticket is created";
@@ -75,7 +75,7 @@ public class ActionService implements ActionServiceAdapter {
                 break;
 
 
-            case "Approve":
+            case "APPROVE":
                 checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.APPROVE);
                 ticket.setApprover(user);
                 ticket.setState(State.APPROVED);
@@ -94,7 +94,7 @@ public class ActionService implements ActionServiceAdapter {
                 break;
 
 
-            case "Decline":
+            case "DECLINE":
                 checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.DECLINE);
                 ticket.setApprover(user);
                 ticket.setState(State.DECLINED);
@@ -112,7 +112,7 @@ public class ActionService implements ActionServiceAdapter {
 
                 break;
 
-            case "Cancel":
+            case "CANCEL":
                 checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.CANCEL);
                 if (!user.getId().equals(ticket.getOwner().getId()) && state.equals(State.NEW)) {
                     ticket.setApprover(user);
@@ -124,7 +124,7 @@ public class ActionService implements ActionServiceAdapter {
 
                     afterPerformAction.put("mail", mail);
 
-                } else {
+                } else if (user.getRole().equals(UserRole.ENGINEER)) {
                     ticket.setAssignee(user);
 
                     recipients = List.of(ticket.getOwner(), ticket.getApprover(), ticket.getAssignee());
@@ -139,14 +139,14 @@ public class ActionService implements ActionServiceAdapter {
                 descriptionForHistoryRecord = "Ticket Status is changed from " + state + " to CANCELED.";
                 break;
 
-            case "Assign to Me":
+            case "ASSIGN TO ME":
                 checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.ASSIGN);
                 ticket.setAssignee(user);
                 ticket.setState(State.PROGRESS);
                 descriptionForHistoryRecord = "Ticket Status is changed from " + state + " to IN PROGRESS.";
                 break;
 
-            case "Done":
+            case "DONE":
                 checkUserPermissionToPerformAction(state, user, ticket.getOwner(), Action.DONE);
                 ticket.setState(State.DONE);
                 descriptionForHistoryRecord = "Ticket Status is changed from " + state + " to DONE.";
@@ -162,7 +162,7 @@ public class ActionService implements ActionServiceAdapter {
 
                 break;
 
-            case "Leave feedback":
+            case "LEAVE FEEDBACK":
                 actionForHistoryRecord = "Feedback was provided";
                 descriptionForHistoryRecord = "Feedback was provided";
 

@@ -1,5 +1,6 @@
 package com.javamaster.controllers;
 
+import com.javamaster.dto.ResponseMessage;
 import com.javamaster.entities.Attachment;
 import com.javamaster.services.adapters.AttachmentServiceAdapter;
 import lombok.AllArgsConstructor;
@@ -33,8 +34,8 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removeAttachment(@PathVariable Long id) {
+    public ResponseMessage removeAttachment(@PathVariable Long id) {
         attachmentService.removeAttachment(id);
-        return ResponseEntity.ok("Attachment has been successfully removed.");
+        return new ResponseMessage("Attachment has been successfully removed.");
     }
 }
