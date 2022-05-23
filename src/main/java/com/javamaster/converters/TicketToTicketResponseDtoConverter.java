@@ -21,7 +21,7 @@ public class TicketToTicketResponseDtoConverter {
                 .id(source.getId())
                 .name(source.getName())
                 .desiredResolutionDate(source.getDesiredResolutionDate())
-                .urgency(source.getUrgency().getUrgency())
+                .urgency(source.getUrgency() == null ? null : source.getUrgency().getUrgency())
                 .state(source.getState().getValue())
                 .action((actionService.setPossibleAction(source.getState(), user, source.getOwner()))
                         .stream()

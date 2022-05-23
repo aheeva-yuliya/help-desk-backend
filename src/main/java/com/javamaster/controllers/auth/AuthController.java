@@ -24,6 +24,6 @@ public class AuthController {
     public AuthResponse auth(@Valid @RequestBody AuthRequest request) {
         User userEntity = userService.findByEmailAndPassword(request.getEmail(), request.getPassword());
         String token = jwtProvider.generateToken(userEntity.getEmail());
-        return new AuthResponse(token);
+        return new AuthResponse(token, userEntity.getRole());
     }
 }
