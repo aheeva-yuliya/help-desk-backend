@@ -41,11 +41,11 @@ public class TicketService implements TicketServiceAdapter {
         Timestamp now = dateTimeProvider.now();
         rawTicket.setCreatedOn(now);
 
-        if (action.equals("Submit")) {
-            checkFields(rawTicket);
-        }
-
         Ticket ticket = toTicketConverter.convert(rawTicket);
+
+        if (action.equals("SUBMIT")) {
+            checkFields(ticket);
+        }
 
         return completeTicketAction(rawTicket, ticket.getOwner(), action, ticket);
     }
@@ -61,8 +61,8 @@ public class TicketService implements TicketServiceAdapter {
         existed.setDescription(ticketRaw.getDescription());
         existed.setUrgency(ticketRaw.getUrgency());
 
-        if (action.equals("Submit")) {
-            checkFields(ticketRaw);
+        if (action.equals("SUBMIT")) {
+            checkFields(existed);
         }
 
         return completeTicketAction(ticketRaw, existed.getOwner(), action, existed);
@@ -72,6 +72,10 @@ public class TicketService implements TicketServiceAdapter {
     @Transactional
     public Long changeStatus(User user, Long ticketId, String action) {
         Ticket ticket = getById(ticketId);
+
+        if (action.equals("SUBMIT")) {
+            checkFields(ticket);
+        }
 
         return completeTicketAction(null, user, action, ticket);
     }
@@ -125,19 +129,19 @@ public class TicketService implements TicketServiceAdapter {
 
     private void checkOwner(Ticket ticket, User owner) {
         if (!ticket.getOwner().equals(owner)) {
-            throw new ForbiddenException("Ticket could only be edited by the owner");
+            throw new ForbiddenException("Ticket could only be edited by the owner.");
         }
     }
 
-    private void checkFields(TicketRaw ticketRaw) {
-        if (ticketRaw.getCategory() == null) {
-            throw new BadRequestException("Category filed should be filled.");
+    private void checkFields(Ticket ticket) {
+        if (ticket.getName() == null) {
+            throw new BadRequestException("Name field should be filled.");
         }
-        if (ticketRaw.getName() == null) {
-            throw new BadRequestException("Name filed should be filled.");
+        if (ticket.getUrgency() == null) {
+            throw new BadRequestException("Urgency field should be filled.");
         }
-        if (ticketRaw.getUrgency() == null) {
-            throw new BadRequestException("Urgency filed should be filled.");
+        if (ticket.getCategory() == null) {
+            throw new BadRequestException("Category field should be filled.");
         }
     }
 
