@@ -177,7 +177,7 @@ public class ActionService implements ActionServiceAdapter {
                 break;
 
             default:
-                throw new NotFoundException("Action " + action + "can't be performed");
+                throw new NotFoundException("Action " + action + " can't be performed");
         }
 
         afterPerformAction.put("history", prepareHistory(user, actionForHistoryRecord, descriptionForHistoryRecord));

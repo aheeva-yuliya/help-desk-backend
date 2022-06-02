@@ -40,7 +40,7 @@ public class FeedbackService implements FeedbackServiceAdapter {
         feedback.setTicket(ticket);
         feedbackRepository.save(feedback);
 
-        Map<String, Object> props = actionService.performAction(feedback.getOwner(), ticket, "Leave feedback");
+        Map<String, Object> props = actionService.performAction(feedback.getOwner(), ticket, "LEAVE FEEDBACK");
         actionService.completeAction(ticket, props);
     }
 }

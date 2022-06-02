@@ -60,6 +60,7 @@ public class TicketService implements TicketServiceAdapter {
         existed.setName(ticketRaw.getName());
         existed.setDescription(ticketRaw.getDescription());
         existed.setUrgency(ticketRaw.getUrgency());
+        existed.setDesiredResolutionDate(ticketRaw.getDesiredResolutionDate());
 
         if (action.equals("SUBMIT")) {
             checkFields(existed);
@@ -153,7 +154,7 @@ public class TicketService implements TicketServiceAdapter {
     }
 
     private void checkComment(Comment comment, Ticket ticket) {
-        if (comment != null) {
+        if (comment != null && !comment.getText().equals("")) {
             comment.setTicket(ticket);
             commentService.addComment(comment);
         }
