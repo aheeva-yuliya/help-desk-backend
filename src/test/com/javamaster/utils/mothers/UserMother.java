@@ -29,7 +29,7 @@ public class UserMother {
                 .name("Ivan")
                 .password("ivan")
                 .role(UserRole.MANAGER);
-    }
+                
 
     public static User.UserBuilder<?, ?> createPetr() {
         return User.builder()
@@ -38,5 +38,14 @@ public class UserMother {
                 .name("Petr")
                 .password("petr")
                 .role(UserRole.ENGINEER);
+    }
+    
+     public static User.UserBuilder<?, ?> hello() {
+        return User.builder()
+                .id(null)
+                .email("ivan@yopmail.com")
+                .name("Ivan")
+                .password("ivan")
+                .role(UserRole.MANAGER);
     }
 }
